@@ -8,17 +8,19 @@ import os
 import pandas as pd
 import utils.constants as C
 
-SOURCE_PATH = os.environ[C.PATH_ENV_VARIABLE]
-OUTPUT_PATH = os.path.join(SOURCE_PATH, 'results')
-EXPENSES_FILENAME = os.environ[C.EXPENSES_ENV_VARIABLE]
-SUMMARY_BY_MONTH_FILENAME = os.environ[C.SUMMARY_BY_MONTH_ENV_VARIABLE]
-SUMMARY_BY_TYPE_FILENAME = os.environ[C.SUMMARY_BY_TYPE_ENV_VARIABLE]
+to_save = False
 
-to_save = True
+YEAR = os.environ[C.YEAR_ENV_VARIABLE]
+SOURCE_PATH = os.environ[C.PATH_ENV_VARIABLE]
+SOURCE_FOLDER = f'{YEAR}{os.environ[C.FOLDER_ENV_VARIABLE]}'
+OUTPUT_PATH = os.path.join(SOURCE_PATH, SOURCE_FOLDER, 'results')
+EXPENSES_FILENAME = f'{YEAR}{os.environ[C.EXPENSES_ENV_VARIABLE]}'
+SUMMARY_BY_MONTH_FILENAME = f'{YEAR}{os.environ[C.SUMMARY_BY_MONTH_ENV_VARIABLE]}'
+SUMMARY_BY_TYPE_FILENAME = f'{YEAR}{os.environ[C.SUMMARY_BY_TYPE_ENV_VARIABLE]}'
 
 if __name__ == '__main__':
 
-    expenses_df = pd.read_csv(os.path.join(SOURCE_PATH, EXPENSES_FILENAME))
+    expenses_df = pd.read_csv(os.path.join(SOURCE_PATH, SOURCE_FOLDER, EXPENSES_FILENAME))
 
     expenses_df[C.MONTH_COL] = expenses_df[C.DATE_COL].apply(lambda x: x.split('-')[1])
     MONTH_MAP = dict(map(lambda i, j: (i, j), expenses_df[C.MONTH_COL].unique(), range(1, 13)))
